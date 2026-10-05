@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Logic_layer.Classes
+namespace Logic_layer.Models
+
 {
     public class ZaakModel
     {

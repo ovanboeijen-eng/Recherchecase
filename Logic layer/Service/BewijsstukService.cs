@@ -1,24 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Text;
-using Logic_layer.Classes;
+using Logic_layer.Models;
 
 namespace Logic_layer.Service
 {
     public class BewijsstukService
     {
-        public void MaakBewijsstukAan(BewijsstukModel bewijsstuk)
+        public bool MaakBewijsstukAan(BewijsstukModel bewijsstuk)
         {
+            if (bewijsstuk == null) throw new ArgumentNullException(nameof(bewijsstuk));
             if (string.IsNullOrEmpty(bewijsstuk.Titel))
             {
                 throw new ArgumentException("Titel mag niet leeg zijn.");
             }
-            
-            if (string.IsNullOrEmpty(bewijsstuk.Soort))
+
+            try 
             {
-                throw new ArgumentException("Soort mag niet leeg zijn.");
+                _bewijsstukRepository.MaakBewijsstukAan(bewijsstuk);
+                return true;
             }
-            // _bewijsstukRepository.MaakBewijsstukAan(bewijsstuk);
+            catch (Exception ex)
+            {
+                // Log de foutmelding of voer andere foutafhandelingslogica uit
+                throw new Exception("Er is een fout opgetreden bij het aanmaken van het bewijsstuk.", ex);
+            }
+
         }
         public void WijzigBewijsstuk(BewijsstukModel bewijsstuk)
         {

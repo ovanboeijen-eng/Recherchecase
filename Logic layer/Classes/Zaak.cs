@@ -6,8 +6,16 @@ namespace Logic_layer.Classes
 {
     public class Zaak
     {
-        private int Id { get; set; }
-        private string Titel { get; set; }
+        required public int Id { get; set; }
+        required public string Titel { get; set; }
+        public string Notitie { get; set; }
 
+        public Zaak(int id, string titel, string notitie)
+        {
+            Id = id;
+            Titel = titel;
+            Notitie = notitie;
+        }
     }
 }
+

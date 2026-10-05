@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="Controller/Controller.csproj" />
+  <Project Path="DAL laag/DAL laag.csproj" />
+  <Project Path="Interfaces/Interfaces.csproj" />
+  <Project Path="Logic layer/Logic layer.csproj" />
+  <Project Path="Recherchecase/Recherchecase.csproj" />
+</Solution>

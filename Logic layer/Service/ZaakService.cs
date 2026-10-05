@@ -7,14 +7,8 @@ namespace Logic_layer.Service
 {
     public class ZaakService
     {
-        //   private readonly ZaakRepository _zaakRepository;
-
-        //  public ZaakService(ZaakRepository zaakRepository)
-        //   {
-        //       _zaakRepository = zaakRepository;
-        //    } 
-
-        public void MaakZaakAan(Zaak zaak)
+        
+        public void MaakZaakAan(ZaakModel zaak)
         {
             if (string.IsNullOrEmpty(zaak.Titel))
             {
@@ -24,7 +18,7 @@ namespace Logic_layer.Service
 
         }
 
-        public void WijzigZaak(Zaak zaak)
+        public void WijzigZaak(ZaakModel zaak)
         {
             if (string.IsNullOrEmpty(zaak.Titel))
             {
@@ -33,12 +27,19 @@ namespace Logic_layer.Service
             // _zaakRepository.WijzigZaak(zaak);
         }
 
-        public void VerwijderZaak(int zaakId)
+        public int BekijkZaak(int zaakId)
         {
-            //  _zaakRepository.VerwijderZaak(zaakId);
+            // _zaakRepository.BekijkZaak(zaakId);
+            return 0;
         }
 
-        public void VoegBewijsstukToeAanZaak(int zaakId, Bewijsstuk bewijsstuk)
+        public int VerwijderZaak(int zaakId)
+        {
+            //  _zaakRepository.VerwijderZaak(zaakId);
+            return 0;
+        }
+
+        public void VoegBewijsstukToeAanZaak(int zaakId, BewijsstukModel bewijsstuk)
         {
             if (string.IsNullOrEmpty(bewijsstuk.Titel))
             {

@@ -1,5 +1,6 @@
 ﻿using Logic_layer.Models;
-using Logic_layer.Interface;
+using DAL_laag.Interface;
+using DAL_laag.DTO;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -26,12 +27,11 @@ namespace Logic_layer.Service
 
             try
             {
-                _zaakRepository.MaakZaakAan(zaak);
+                _zaakRepository.MaakZaakAan(MapToDto(zaak));
                 return true;
             }
             catch (Exception)
             {
-              
                 return false;
             }
         }
@@ -42,7 +42,7 @@ namespace Logic_layer.Service
             {
                 throw new ArgumentException("Titel mag niet leeg zijn.");
             }
-             _zaakRepository.WijzigZaak(zaak);
+            _zaakRepository.WijzigZaak(MapToDto(zaak));
         }
 
         public int BekijkZaak(int zaakId)
@@ -88,5 +88,13 @@ namespace Logic_layer.Service
              _zaakRepository.WijzigNotitieInZaak(zaakId, notitie);
         }
 
+        // helper mapper
+        private static ZaakDTO MapToDto(ZaakModel zaak) =>
+    new ZaakDTO
+    {
+        Id = zaak.Id,
+        Titel = zaak.Titel,
+        Notitie = zaak.Notitie
+    };
     }
 }

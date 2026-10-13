@@ -1,10 +1,11 @@
 ﻿using DataAccess.Database;
-using DAL_laag.Interfaces;
+using DAL_laag.Interface;
 using DAL_laag.DTO;
+using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Logic_layer.Interface;
+
 
 namespace DAL_laag.Repository
 {
@@ -19,7 +20,28 @@ namespace DAL_laag.Repository
 
         public ZaakDTO BekijkZaak(int zaakId)
         {
-            throw new NotImplementedException();
+            if (zaakId <= 0) throw new ArgumentException("Invalid zaakId", nameof(zaakId));
+
+            using var connection = _database.GetConnection();
+            connection.Open();
+
+            using var command = connection.CreateCommand();
+            command.CommandText = "SELECT Id, Titel, Beschrijving, Datum, Notitie FROM Zaak WHERE Id = @Id";
+            command.Parameters.AddWithValue("@Id", zaakId);
+
+            using var reader = command.ExecuteReader();
+            if (!reader.Read()) return null;
+
+            var dto = new ZaakDTO
+            {
+                Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                Titel = reader.GetString(reader.GetOrdinal("Titel")),
+                Beschrijving = reader.IsDBNull(reader.GetOrdinal("Beschrijving")) ? null : reader.GetString(reader.GetOrdinal("Beschrijving")),
+                Datum = reader.GetDateTime(reader.GetOrdinal("Datum")),
+                Notitie = reader.IsDBNull(reader.GetOrdinal("Notitie")) ? null : reader.GetString(reader.GetOrdinal("Notitie"))
+            };
+
+            return dto;
         }
 
         public bool MaakZaakAan(ZaakDTO zaak)

@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Text;
 using DAL_laag.DTO;
 
-namespace Logic_layer.Interface
-{
+namespace DAL_laag.Interface;
+
     public interface IZaakRepository
     {
         bool MaakZaakAan(ZaakDTO zaak);
@@ -19,4 +19,4 @@ namespace Logic_layer.Interface
         void WijzigNotitieInZaak(int zaakId, string notitie);
 
     }
-}
+

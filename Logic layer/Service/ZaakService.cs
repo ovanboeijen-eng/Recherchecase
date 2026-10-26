@@ -36,19 +36,14 @@ namespace Logic_layer.Service
             }
         }
 
-        public void WijzigZaak(ZaakModel zaak)
+        public ZaakModel BekijkZaak(int zaakId)
         {
-            if (string.IsNullOrEmpty(zaak.Titel))
+            var zaak = _zaakRepository.BekijkZaak(zaakId);
+            if (zaak == null)
             {
-                throw new ArgumentException("Titel mag niet leeg zijn.");
+                throw new ArgumentException("Zaak niet gevonden.");
             }
-            _zaakRepository.WijzigZaak(MapZaakToDTO(zaak));
-        }
-
-        public int BekijkZaak(int zaakId)
-        {
-            _zaakRepository.BekijkZaak(zaakId);
-            return 0;
+            return MapZaakToModel(zaak);
         }
 
         public int VerwijderZaak(int zaakId)
@@ -57,21 +52,14 @@ namespace Logic_layer.Service
             return 0;
         }
 
-        public void VoegBewijsstukToeAanZaak(int zaakId, BewijsstukModel bewijsstuk)
-        {
-            if (string.IsNullOrEmpty(bewijsstuk.Titel))
-            {
-                throw new ArgumentException("Titel van bewijsstuk mag niet leeg zijn.");
-            }
-            _zaakRepository.VoegBewijsstukToeAanZaak(zaakId, MapBewijsstukToDTO(bewijsstuk));
-        }
-
-        public void VerwijderBewijsstukVanZaak(int zaakId, int bewijsstukId)
+        public bool VerwijderBewijsstukVanZaak(int zaakId, int bewijsstukId)
         {
             _zaakRepository.VerwijderBewijsstukUitZaak(zaakId, bewijsstukId);
+            return true;
         }
+        
 
-        public void WijzigBewijsstukInZaak(int zaakId, BewijsstukDTO bewijsstuk)
+        public bool WijzigBewijsstukInZaak(int zaakId, BewijsstukDTO bewijsstuk)
         {
             if (string.IsNullOrEmpty(bewijsstuk.Titel))
             {
@@ -82,10 +70,12 @@ namespace Logic_layer.Service
                 throw new ArgumentException("Soort van bewijsstuk mag niet leeg zijn.");
             }
             _zaakRepository.WijzigBewijsstukInZaak(zaakId, bewijsstuk);
+            return true;
         }
-        public void WijzigNotitieVanZaak(int zaakId, string notitie)
+        public bool WijzigNotitieVanZaak(int zaakId, string notitie)
         {
             _zaakRepository.WijzigNotitieInZaak(zaakId, notitie);
+            return true;
         }
 
         // helper mapper
@@ -104,5 +94,11 @@ namespace Logic_layer.Service
                 Titel = bewijsstuk.Titel,
                 Soort = bewijsstuk.Soort
             };
+
+        private ZaakModel MapZaakToModel(ZaakDTO zaak)
+        {
+            return new ZaakModel(zaak.Id, zaak.Titel, zaak.Notitie);
+      
+        }
     }
 }

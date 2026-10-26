@@ -67,22 +67,22 @@ namespace DAL_laag.Repository
             return rowsAffected > 0;
         }
 
-        public void VerwijderBewijsstukUitZaak(int zaakId, int bewijsstukId)
+        public bool VerwijderBewijsstukUitZaak(int zaakId, int bewijsstukId)
         {
             throw new NotImplementedException();
         }
 
-        public void VerwijderZaak(int zaakId)
+        public bool VerwijderZaak(int zaakId)
         {
             throw new NotImplementedException();
         }
 
-        public void VoegBewijsstukToeAanZaak(int zaakId, BewijsstukDTO bewijsstuk)
+        public bool VoegBewijsstukToeAanZaak(int zaakId, BewijsstukDTO bewijsstuk)
         {
             throw new NotImplementedException();
         }
 
-        public void WijzigBewijsstukInZaak(int zaakId, BewijsstukDTO bewijsstuk)
+        public bool WijzigBewijsstukInZaak(int zaakId, BewijsstukDTO bewijsstuk)
         {
             throw new NotImplementedException();
         }
@@ -93,6 +93,16 @@ namespace DAL_laag.Repository
         }
 
         public void WijzigZaak(ZaakDTO zaak)
+        {
+            throw new NotImplementedException();
+        }
+
+        bool IZaakRepository.WijzigNotitieInZaak(int zaakId, string notitie)
+        {
+            throw new NotImplementedException();
+        }
+
+        bool IZaakRepository.WijzigZaak(ZaakDTO zaak)
         {
             throw new NotImplementedException();
         }

@@ -1,4 +1,4 @@
-namespace Recherchecase.Models
+namespace Recherchecase.ViewModels
 {
     public class ErrorViewModel
     {

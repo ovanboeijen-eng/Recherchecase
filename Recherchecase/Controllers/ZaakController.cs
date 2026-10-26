@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Logic_layer.Service;
-
-using Recherchecase.Models;
+using Recherchecase.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Recherchecase.Controllers

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Recherchecase.Models
+namespace Recherchecase.ViewModels
 {
     public class ZaakViewModel
     {

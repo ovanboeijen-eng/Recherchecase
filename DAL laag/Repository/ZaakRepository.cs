@@ -18,7 +18,7 @@ namespace DAL_laag.Repository
             _database = database;
         }
 
-        public ZaakDTO BekijkZaak(int zaakId)
+        public ZaakDTO? BekijkZaak(int zaakId)
         {
             if (zaakId <= 0) throw new ArgumentException("Invalid zaakId", nameof(zaakId));
 
@@ -30,8 +30,12 @@ namespace DAL_laag.Repository
             command.Parameters.AddWithValue("@Id", zaakId);
 
             using var reader = command.ExecuteReader();
-            if (!reader.Read()) return null;
-
+            if (!reader.Read())
+            {
+                return null;
+            }
+            else
+            { 
             var dto = new ZaakDTO
             {
                 Id = reader.GetInt32(reader.GetOrdinal("Id")),
@@ -42,13 +46,25 @@ namespace DAL_laag.Repository
             };
 
             return dto;
+            }
+
         }
 
         public bool MaakZaakAan(ZaakDTO zaak)
         {
             if (zaak == null) throw new ArgumentNullException(nameof(zaak));
-            // TODO: add database insert logic
-            return false;
+            using var connection = _database.GetConnection();
+            connection.Open();
+
+            using var command = connection.CreateCommand();
+            command.CommandText = "INSERT INTO Zaak (Titel, Beschrijving, Datum, Notitie) VALUES (@Titel, @Beschrijving, @Datum, @Notitie)";
+            command.Parameters.AddWithValue("@Titel", zaak.Titel);
+            command.Parameters.AddWithValue("@Beschrijving", (object)zaak.Beschrijving ?? DBNull.Value);
+            command.Parameters.AddWithValue("@Datum", zaak.Datum);
+            command.Parameters.AddWithValue("@Notitie", (object)zaak.Notitie ?? DBNull.Value);
+
+            var rowsAffected = command.ExecuteNonQuery();
+            return rowsAffected > 0;
         }
 
         public void VerwijderBewijsstukUitZaak(int zaakId, int bewijsstukId)
@@ -76,7 +92,7 @@ namespace DAL_laag.Repository
             throw new NotImplementedException();
         }
 
-        public void WijzigZaak(ZaakDTO  zaak)
+        public void WijzigZaak(ZaakDTO zaak)
         {
             throw new NotImplementedException();
         }

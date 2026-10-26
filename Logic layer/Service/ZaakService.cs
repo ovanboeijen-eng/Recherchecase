@@ -27,7 +27,7 @@ namespace Logic_layer.Service
 
             try
             {
-                _zaakRepository.MaakZaakAan(MapToDto(zaak));
+                _zaakRepository.MaakZaakAan(MapZaakToDTO(zaak));
                 return true;
             }
             catch (Exception)
@@ -42,18 +42,18 @@ namespace Logic_layer.Service
             {
                 throw new ArgumentException("Titel mag niet leeg zijn.");
             }
-            _zaakRepository.WijzigZaak(MapToDto(zaak));
+            _zaakRepository.WijzigZaak(MapZaakToDTO(zaak));
         }
 
         public int BekijkZaak(int zaakId)
         {
-             _zaakRepository.BekijkZaak(zaakId);
+            _zaakRepository.BekijkZaak(zaakId);
             return 0;
         }
 
         public int VerwijderZaak(int zaakId)
         {
-              _zaakRepository.VerwijderZaak(zaakId);
+            _zaakRepository.VerwijderZaak(zaakId);
             return 0;
         }
 
@@ -63,15 +63,15 @@ namespace Logic_layer.Service
             {
                 throw new ArgumentException("Titel van bewijsstuk mag niet leeg zijn.");
             }
-             _zaakRepository.VoegBewijsstukToeAanZaak(zaakId, bewijsstuk);
+            _zaakRepository.VoegBewijsstukToeAanZaak(zaakId, MapBewijsstukToDTO(bewijsstuk));
         }
 
         public void VerwijderBewijsstukVanZaak(int zaakId, int bewijsstukId)
         {
-             _zaakRepository.VerwijderBewijsstukUitZaak(zaakId, bewijsstukId);
+            _zaakRepository.VerwijderBewijsstukUitZaak(zaakId, bewijsstukId);
         }
 
-        public void WijzigBewijsstukInZaak(int zaakId, BewijsstukModel bewijsstuk)
+        public void WijzigBewijsstukInZaak(int zaakId, BewijsstukDTO bewijsstuk)
         {
             if (string.IsNullOrEmpty(bewijsstuk.Titel))
             {
@@ -85,16 +85,24 @@ namespace Logic_layer.Service
         }
         public void WijzigNotitieVanZaak(int zaakId, string notitie)
         {
-             _zaakRepository.WijzigNotitieInZaak(zaakId, notitie);
+            _zaakRepository.WijzigNotitieInZaak(zaakId, notitie);
         }
 
         // helper mapper
-        private static ZaakDTO MapToDto(ZaakModel zaak) =>
-    new ZaakDTO
-    {
-        Id = zaak.Id,
-        Titel = zaak.Titel,
-        Notitie = zaak.Notitie
-    };
+        private static ZaakDTO MapZaakToDTO(ZaakModel zaak) =>
+            new ZaakDTO
+            {
+                Id = zaak.Id,
+                Titel = zaak.Titel,
+                Notitie = zaak.Notitie
+            };
+
+        private static BewijsstukDTO MapBewijsstukToDTO(BewijsstukModel bewijsstuk) =>
+            new BewijsstukDTO
+            {
+                Id = bewijsstuk.Id,
+                Titel = bewijsstuk.Titel,
+                Soort = bewijsstuk.Soort
+            };
     }
 }

@@ -9,7 +9,7 @@ namespace DAL_laag.Interface;
     {
         bool MaakZaakAan(ZaakDTO zaak);
         void WijzigZaak(ZaakDTO zaak);
-        ZaakDTO BekijkZaak(int zaakId);
+        ZaakDTO? BekijkZaak(int zaakId);
         void VerwijderZaak(int zaakId);
         void VoegBewijsstukToeAanZaak(int zaakId, BewijsstukDTO bewijsstuk);
         
@@ -18,5 +18,7 @@ namespace DAL_laag.Interface;
 
         void WijzigNotitieInZaak(int zaakId, string notitie);
 
-    }
+   
+        }
+    
 

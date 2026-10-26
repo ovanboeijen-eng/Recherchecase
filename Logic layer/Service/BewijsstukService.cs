@@ -2,12 +2,22 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Text;
+using DAL_laag.DTO;
+using DAL_laag.Interfaces;
 using Logic_layer.Models;
+
 
 namespace Logic_layer.Service
 {
     public class BewijsstukService
     {
+        private readonly IBewijsstukRepository _bewijsstukRepository;
+
+        public BewijsstukService(IBewijsstukRepository BewijsstukRepository)
+        {
+            _bewijsstukRepository =  BewijsstukRepository;
+        }
+
         public bool MaakBewijsstukAan(BewijsstukModel bewijsstuk)
         {
             if (bewijsstuk == null) throw new ArgumentNullException(nameof(bewijsstuk));
@@ -18,7 +28,7 @@ namespace Logic_layer.Service
 
             try 
             {
-                _bewijsstukRepository.MaakBewijsstukAan(bewijsstuk);
+                _bewijsstukRepository.MaakBewijsstukAan(MapBewijsstukToDTO(bewijsstuk));
                 return true;
             }
             catch (Exception ex)
@@ -38,18 +48,26 @@ namespace Logic_layer.Service
             {
                 throw new ArgumentException("Soort mag niet leeg zijn.");
             }
-            // _bewijsstukRepository.WijzigBewijsstuk(bewijsstuk);
+            _bewijsstukRepository.WijzigBewijsstuk (MapBewijsstukToDTO(bewijsstuk));
         }
 
         public int BekijkBewijsstuk(int bewijsstukId)
         {
-            // _bewijsstukRepository.BekijkBewijsstuk(bewijsstukId);
+            _bewijsstukRepository.BekijkBewijsstuk(bewijsstukId);
             return 0;
         }
         public int VerwijderBewijsstuk(int bewijsstukId)
         {
-            // _bewijsstukRepository.VerwijderBewijsstuk(bewijsstukId);
+            _bewijsstukRepository.VerwijderBewijsstuk(bewijsstukId);
             return 0;
         }
+        private static BewijsstukDTO MapBewijsstukToDTO(BewijsstukModel bewijsstuk) =>
+            new BewijsstukDTO
+            {
+                Id = bewijsstuk.Id,
+                Titel = bewijsstuk.Titel,
+                Soort = bewijsstuk.Soort,
+              
+            };
     }
 }

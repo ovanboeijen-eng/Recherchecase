@@ -87,13 +87,14 @@ namespace DAL_laag.Repository
             throw new NotImplementedException();
         }
 
-        public void WijzigNotitieInZaak(int zaakId, string notitie)
+        public bool WijzigNotitieInZaak(int zaakId, string notitie)
         {
             throw new NotImplementedException();
         }
 
-        public void WijzigZaak(ZaakDTO zaak)
+        public bool WijzigZaak(ZaakDTO zaak)
         {
+            if (zaak == null) throw new ArgumentNullException(nameof(zaak));
             throw new NotImplementedException();
         }
 

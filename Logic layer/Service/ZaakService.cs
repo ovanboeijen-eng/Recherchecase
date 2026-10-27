@@ -52,6 +52,17 @@ namespace Logic_layer.Service
             return 0;
         }
 
+        public bool WijzigZaak(ZaakModel zaak)
+        {
+            if (zaak == null) throw new ArgumentNullException(nameof(zaak));
+            if (string.IsNullOrWhiteSpace(zaak.Titel))
+            {
+                throw new ArgumentException("Titel mag niet leeg zijn.", nameof(zaak.Titel));
+            }
+            _zaakRepository.WijzigZaak(MapZaakToDTO(zaak));
+            return true;
+        }
+
         public bool VerwijderBewijsstukVanZaak(int zaakId, int bewijsstukId)
         {
             _zaakRepository.VerwijderBewijsstukUitZaak(zaakId, bewijsstukId);

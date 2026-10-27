@@ -1,0 +1,40 @@
+﻿@model Recherchecase.ViewModels.ZaakViewModel
+
+@{
+    ViewData["Title"] = "Zaak bekijken";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <p class="text-uppercase text-secondary small mb-1">
+            Zaakbeheer
+        </p>
+        <h1 class="fw-bold">Zaakdetails</h1>
+        <p class="text-secondary">Bekijk de informatie van deze zaak.</p>
+    </div>
+
+    <a asp-action="WijzigZaak"
+       asp-route-zaakId="@Model.Id"
+       class="btn btn-primary">
+        Zaak wijzigen
+    </a>
+</div>
+
+<div class="card border-0 shadow-sm">
+    <div class="card-header bg-dark text-white p-3">
+        <span class="text-info">Zaaknummer #@Model.Id</span>
+    </div>
+
+    <div class="card-body p-4">
+        <h2 class="h4 fw-bold">@Model.Titel</h2>
+
+        <hr />
+
+        <h3 class="h6 text-secondary">Notitie</h3>
+        <p class="mb-0" style="white-space: pre-wrap">@Model.Notitie</p>
+    </div>
+</div>
+
+<a asp-action="Index" class="btn btn-outline-secondary mt-4">
+    Terug naar zaken
+</a>

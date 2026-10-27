@@ -3,8 +3,6 @@ using Logic_layer.Service;
 using Microsoft.AspNetCore.Mvc;
 using Recherchecase.ViewModels;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Recherchecase.Controllers
 {
@@ -18,9 +16,29 @@ namespace Recherchecase.Controllers
         }
 
         [HttpGet]
+        public IActionResult Index(int? zaakId)
+        {
+            if (zaakId.HasValue)
+            {
+                if (zaakId.Value <= 0) { ViewBag.SearchError = "Vul een geldig zaaknummer in."; return View(); }
+                return RedirectToAction(nameof(BekijkZaak), new { zaakId = zaakId.Value });
+            }
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult MaakZaakAan()
+        {
+            return View(new ZaakViewModel());
+        }
+
+        [HttpGet]
         public IActionResult BekijkZaak(int zaakId)
         {
-            var zaak = _zaakService.BekijkZaak(zaakId);
+            if (zaakId <= 0) return NotFound();
+            ZaakModel zaak;
+            try { zaak = _zaakService.BekijkZaak(zaakId); }
+            catch (ArgumentException) { return NotFound(); }
             if (zaak == null)
             {
                 return NotFound();
@@ -35,14 +53,15 @@ namespace Recherchecase.Controllers
         }
 
         [HttpPost]
-        public IActionResult MaakZaakAan(ZaakModel zaak)
+        public IActionResult MaakZaakAan(ZaakViewModel zaak)
         {
             if (!ModelState.IsValid)
             {
                 return View(zaak);
             }
 
-            bool gelukt = _zaakService.MaakZaakAan(zaak);
+            var model = new ZaakModel(0, zaak.Titel, zaak.Notitie);
+            bool gelukt = _zaakService.MaakZaakAan(model);
 
             if (!gelukt)
             {
@@ -50,13 +69,16 @@ namespace Recherchecase.Controllers
                 return View(zaak);
             }
 
-            return RedirectToAction(nameof(BekijkZaak), new { id = zaak.Id });
+            TempData["Success"] = "De zaak is aangemaakt.";
+            return RedirectToAction(nameof(BekijkZaak), new { zaakId = model.Id });
         }
 
         [HttpGet]
         public IActionResult WijzigZaak(int zaakId)
         {
-            var zaak = _zaakService.BekijkZaak(zaakId);
+            ZaakModel zaak;
+            try { zaak = _zaakService.BekijkZaak(zaakId); }
+            catch (ArgumentException) { return NotFound(); }
 
             if (zaak == null)
             {
@@ -75,13 +97,13 @@ namespace Recherchecase.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult WijzigZaak(ZaakModel viewModel)
+        public IActionResult WijzigZaak(ZaakViewModel viewModel)
         {
             if (!ModelState.IsValid)
             {
                 return View(viewModel);
             }
-            bool gelukt = _zaakService.WijzigZaak(viewModel);
+            bool gelukt = _zaakService.WijzigZaak(new ZaakModel(viewModel.Id, viewModel.Titel, viewModel.Notitie));
             if (!gelukt)
             {
                 ModelState.AddModelError("", "De zaak kon niet worden gewijzigd.");

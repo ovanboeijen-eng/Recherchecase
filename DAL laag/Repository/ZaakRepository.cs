@@ -57,14 +57,16 @@ namespace DAL_laag.Repository
             connection.Open();
 
             using var command = connection.CreateCommand();
-            command.CommandText = "INSERT INTO Zaak (Titel, Beschrijving, Datum, Notitie) VALUES (@Titel, @Beschrijving, @Datum, @Notitie)";
+            command.CommandText = "INSERT INTO Zaak (Titel, Beschrijving, Datum, Notitie) VALUES (@Titel, @Beschrijving, @Datum, @Notitie); SELECT CAST(SCOPE_IDENTITY() AS int);";
             command.Parameters.AddWithValue("@Titel", zaak.Titel);
             command.Parameters.AddWithValue("@Beschrijving", (object)zaak.Beschrijving ?? DBNull.Value);
-            command.Parameters.AddWithValue("@Datum", zaak.Datum);
+            command.Parameters.AddWithValue("@Datum", zaak.Datum == default ? DateTime.Now : zaak.Datum);
             command.Parameters.AddWithValue("@Notitie", (object)zaak.Notitie ?? DBNull.Value);
 
-            var rowsAffected = command.ExecuteNonQuery();
-            return rowsAffected > 0;
+            var insertedId = command.ExecuteScalar();
+            if (insertedId is not int id || id <= 0) return false;
+            zaak.Id = id;
+            return true;
         }
 
         public bool VerwijderBewijsstukUitZaak(int zaakId, int bewijsstukId)
@@ -95,7 +97,14 @@ namespace DAL_laag.Repository
         public bool WijzigZaak(ZaakDTO zaak)
         {
             if (zaak == null) throw new ArgumentNullException(nameof(zaak));
-            throw new NotImplementedException();
+            using var connection = _database.GetConnection();
+            connection.Open();
+            using var command = connection.CreateCommand();
+            command.CommandText = "UPDATE Zaak SET Titel = @Titel, Notitie = @Notitie WHERE Id = @Id";
+            command.Parameters.AddWithValue("@Titel", zaak.Titel);
+            command.Parameters.AddWithValue("@Notitie", (object?)zaak.Notitie ?? DBNull.Value);
+            command.Parameters.AddWithValue("@Id", zaak.Id);
+            return command.ExecuteNonQuery() > 0;
         }
 
         bool IZaakRepository.WijzigNotitieInZaak(int zaakId, string notitie)
@@ -105,7 +114,7 @@ namespace DAL_laag.Repository
 
         bool IZaakRepository.WijzigZaak(ZaakDTO zaak)
         {
-            throw new NotImplementedException();
+            return WijzigZaak(zaak);
         }
     }
 }

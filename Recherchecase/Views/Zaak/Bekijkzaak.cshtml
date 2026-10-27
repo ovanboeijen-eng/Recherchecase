@@ -20,9 +20,11 @@
     </a>
 </div>
 
+@if (TempData["Success"] is string success) { <div class="alert alert-success border-0">@success</div> }
+
 <div class="card border-0 shadow-sm">
     <div class="card-header bg-dark text-white p-3">
-        <span class="text-info">Zaaknummer #@Model.Id</span>
+        <span class="detail-meta">Zaaknummer #@Model.Id</span>
     </div>
 
     <div class="card-body p-4">
@@ -30,8 +32,8 @@
 
         <hr />
 
-        <h3 class="h6 text-secondary">Notitie</h3>
-        <p class="mb-0" style="white-space: pre-wrap">@Model.Notitie</p>
+        <h3 class="detail-section-title">Notitie</h3>
+        <p class="detail-note mb-0">@Model.Notitie</p>
     </div>
 </div>
 

@@ -5,41 +5,36 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Recherche Caseworker</title>
-    <link rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav class="navbar navbar-expand-lg navbar-dark app-navbar">
         <div class="container">
-            <a class="navbar-brand fw-bold"
-               asp-controller="Zaak" asp-action="Index">
-                <span class="text-info">RC</span> Recherche Caseworker
+            <a class="navbar-brand fw-bold" asp-controller="Home" asp-action="Index">
+                <span class="brand-mark">R</span><span>Recherche<span class="brand-light"> /</span> <span class="brand-light">Zaakbeheer</span></span>
             </a>
-
-            <div class="navbar-nav ms-auto">
-                <a class="nav-link"
-                   asp-controller="Zaak" asp-action="Index">
-                    Zaken
-                </a>
-                <a class="nav-link"
-                   asp-controller="Zaak" asp-action="MaakZaakAan">
-                    Nieuwe zaak
-                </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Menu openen"><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse" id="mainNav">
+                <div class="navbar-nav ms-auto align-items-lg-center gap-lg-3">
+                    <a class="nav-link" asp-controller="Zaak" asp-action="Index">Zaken</a>
+                    <a class="nav-link" asp-controller="Zaak" asp-action="MaakZaakAan">Nieuwe zaak</a>
+                    <span class="nav-divider d-none d-lg-block"></span><span class="nav-caption">WERKOMGEVING</span>
+                </div>
             </div>
         </div>
     </nav>
 
-    <main class="container py-5">
+    <main class="container app-main">
         @RenderBody()
     </main>
 
-    <footer class="border-top py-3 mt-5">
-        <div class="container text-muted small">
-            Recherche Caseworker · Zaakbeheer
+    <footer class="app-footer">
+        <div class="container d-flex justify-content-between"><span>Recherche <span class="footer-muted">/ Dossierbeheer</span></span><span class="footer-muted">Interne werkomgeving</span>
         </div>
     </footer>
 
     @await RenderSectionAsync("Scripts", required: false)
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

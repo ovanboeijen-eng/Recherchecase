@@ -7,14 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="Views\Zaak\Bekijkzaak.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="Views\Zaak\Bekijkzaak.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.Data.SqlClient" Version="7.1.1" />
   </ItemGroup>
 

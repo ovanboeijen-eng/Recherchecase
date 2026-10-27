@@ -27,8 +27,10 @@ namespace Logic_layer.Service
 
             try
             {
-                _zaakRepository.MaakZaakAan(MapZaakToDTO(zaak));
-                return true;
+                var dto = MapZaakToDTO(zaak);
+                var gelukt = _zaakRepository.MaakZaakAan(dto);
+                if (gelukt) zaak.Id = dto.Id;
+                return gelukt;
             }
             catch (Exception)
             {
@@ -59,8 +61,7 @@ namespace Logic_layer.Service
             {
                 throw new ArgumentException("Titel mag niet leeg zijn.", nameof(zaak.Titel));
             }
-            _zaakRepository.WijzigZaak(MapZaakToDTO(zaak));
-            return true;
+            return _zaakRepository.WijzigZaak(MapZaakToDTO(zaak));
         }
 
         public bool VerwijderBewijsstukVanZaak(int zaakId, int bewijsstukId)

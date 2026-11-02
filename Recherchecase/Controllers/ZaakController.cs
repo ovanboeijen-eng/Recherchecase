@@ -51,7 +51,8 @@ namespace Recherchecase.Controllers
                             Id = zaakId,
                             Nummer = zaak.Nummer,
                             Titel = zaak.Titel,
-                            Notitie = zaak.Notitie
+                            Notitie = zaak.Notitie,
+                            AangemaaktOp = zaak.AangemaaktOp
                         };
                         return View(viewModel);
                     }
@@ -115,7 +116,8 @@ namespace Recherchecase.Controllers
                 Id = zaak.Id,
                 Nummer = zaak.Nummer,
                 Titel = zaak.Titel,
-                Notitie = zaak.Notitie
+                Notitie = zaak.Notitie,
+                AangemaaktOp = zaak.AangemaaktOp
             };
 
             return View(viewModel);

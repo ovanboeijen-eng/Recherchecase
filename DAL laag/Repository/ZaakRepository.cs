@@ -23,7 +23,7 @@ namespace DAL_laag.Repository
             connection.Open();
             using var command = connection.CreateCommand();
             command.CommandText = @"
-                SELECT TOP (1) Id, Titel, Notities, Nummer, Beschrijving
+                SELECT TOP (1) Id, Titel, Notities, Nummer, Beschrijving, AangemaaktOp
                 FROM dbo.Zaak
                 WHERE Id = @Id OR Nummer = @Id
                 ORDER BY CASE WHEN Nummer = @Id THEN 0 ELSE 1 END";
@@ -38,7 +38,8 @@ namespace DAL_laag.Repository
                 Titel = reader.IsDBNull(reader.GetOrdinal("Titel")) ? string.Empty : reader.GetString(reader.GetOrdinal("Titel")),
                 Notitie = reader.IsDBNull(reader.GetOrdinal("Notities")) ? null : reader.GetString(reader.GetOrdinal("Notities")),
                 Nummer = reader.IsDBNull(reader.GetOrdinal("Nummer")) ? reader.GetInt32(reader.GetOrdinal("Id")) : reader.GetInt32(reader.GetOrdinal("Nummer")),
-                Beschrijving = reader.IsDBNull(reader.GetOrdinal("Beschrijving")) ? null : reader.GetString(reader.GetOrdinal("Beschrijving"))
+                Beschrijving = reader.IsDBNull(reader.GetOrdinal("Beschrijving")) ? null : reader.GetString(reader.GetOrdinal("Beschrijving")),
+                AangemaaktOp = reader.GetDateTime(reader.GetOrdinal("AangemaaktOp"))
             };
         }
 
@@ -70,13 +71,14 @@ namespace DAL_laag.Repository
             {
                 insertCommand.Transaction = transaction;
                 insertCommand.CommandText = @"
-                    INSERT INTO dbo.Zaak (Id, Titel, Notities, Nummer, Beschrijving)
-                    VALUES (@Id, @Titel, @Notities, @Nummer, @Beschrijving)";
+                    INSERT INTO dbo.Zaak (Id, Titel, Notities, Nummer, Beschrijving, AangemaaktOp)
+                    VALUES (@Id, @Titel, @Notities, @Nummer, @Beschrijving, @AangemaaktOp)";
                 insertCommand.Parameters.Add("@Id", SqlDbType.Int).Value = nextId;
                 insertCommand.Parameters.Add("@Titel", SqlDbType.NVarChar, 50).Value = zaak.Titel.Trim();
                 insertCommand.Parameters.Add("@Notities", SqlDbType.NVarChar, -1).Value = (object?)zaak.Notitie ?? DBNull.Value;
                 insertCommand.Parameters.Add("@Nummer", SqlDbType.Int).Value = nextNummer;
                 insertCommand.Parameters.Add("@Beschrijving", SqlDbType.NVarChar, -1).Value = (object?)zaak.Beschrijving ?? DBNull.Value;
+                insertCommand.Parameters.Add("@AangemaaktOp", SqlDbType.DateTime2).Value = zaak.AangemaaktOp;
                 insertCommand.ExecuteNonQuery();
             }
 
@@ -99,7 +101,6 @@ namespace DAL_laag.Repository
             return command.ExecuteNonQuery() > 0;
         }
 
-        public bool VerwijderBewijsstukUitZaak(int zaakId, int bewijsstukId) => throw new NotImplementedException();
         public bool VerwijderZaak(int zaakId)
         {
             if (zaakId <= 0) throw new ArgumentOutOfRangeException(nameof(zaakId));
@@ -152,7 +153,7 @@ namespace DAL_laag.Repository
             return true;
         }
         public bool VoegBewijsstukToeAanZaak(int zaakId, BewijsstukDTO bewijsstuk) => throw new NotImplementedException();
-        public bool WijzigBewijsstukInZaak(int zaakId, BewijsstukDTO bewijsstuk) => throw new NotImplementedException();
+      
         public bool WijzigNotitieInZaak(int zaakId, string notitie)
         {
             if (zaakId <= 0) throw new ArgumentOutOfRangeException(nameof(zaakId));

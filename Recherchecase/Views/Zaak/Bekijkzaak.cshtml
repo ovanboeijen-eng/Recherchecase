@@ -30,6 +30,7 @@
 
     <div class="card-body p-4">
         <h2 class="h4 fw-bold">@Model.Titel</h2>
+        <p class="text-secondary">Aangemaakt op: @DateTime.SpecifyKind(Model.AangemaaktOp, DateTimeKind.Utc).ToLocalTime().ToString("dd-MM-yyyy HH:mm")</p>
 
         <hr />
 

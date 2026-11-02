@@ -1,0 +1,18 @@
+@{ ViewData["Title"] = "Zaken"; }
+<div class="page-heading">
+    <div><div class="eyebrow"><span class="status-dot"></span> Dossierbeheer</div><h1>Zaakoverzicht</h1><p>Zoek een bestaand dossier op of registreer een nieuwe zaak.</p></div>
+    <a asp-action="MaakZaakAan" class="btn btn-primary">＋ Nieuwe zaak</a>
+</div>
+@if (TempData["Success"] is string success) { <div class="alert alert-success border-0">@success Je kunt het dossier openen met het zaaknummer dat na opslaan wordt getoond.</div> }
+<div class="search-panel">
+    <div class="search-symbol" aria-hidden="true">⌕</div>
+    <div class="search-content"><h2>Zoek op zaaknummer</h2><p>Vul het dossiernummer in om de gegevens te openen.</p>
+        <form asp-action="Index" method="get" class="search-form">
+            <label for="zaakId" class="visually-hidden">Zaaknummer</label>
+            <input id="zaakId" name="zaakId" type="number" min="1" class="form-control" placeholder="Bijvoorbeeld 1042" required />
+            <button type="submit" class="btn btn-primary">Dossier openen <span aria-hidden="true">→</span></button>
+        </form>
+        @if (ViewBag.SearchError is string error) { <div class="text-danger mt-2">@error</div> }
+    </div>
+</div>
+<div class="notice-row"><span class="notice-icon">i</span><p>De zaaklijst en filters zijn nog niet beschikbaar in de huidige backend. Dossiers zijn wel direct op zaaknummer te openen.</p></div>

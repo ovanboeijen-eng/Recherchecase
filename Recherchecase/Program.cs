@@ -1,7 +1,17 @@
+using DAL_laag.Interface;
+using DAL_laag.Repository;
+using DataAccess.Database;
+using Logic_layer.Service;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddSingleton(sp => new DatabaseConnection(
+    builder.Configuration.GetConnectionString("RechercheConnectionString")
+    ?? throw new InvalidOperationException("Connection string 'RechercheConnectionString' ontbreekt.")));
+builder.Services.AddScoped<IZaakRepository, ZaakRepository>();
+builder.Services.AddScoped<ZaakService>();
 
 var app = builder.Build();
 

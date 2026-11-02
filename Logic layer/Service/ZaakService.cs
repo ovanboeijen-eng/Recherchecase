@@ -2,8 +2,6 @@
 using DAL_laag.Interface;
 using DAL_laag.DTO;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Logic_layer.Service
 {
@@ -25,84 +23,83 @@ namespace Logic_layer.Service
                 throw new ArgumentException("Titel mag niet leeg zijn.", nameof(zaak.Titel));
             }
 
-            try
+            var dto = MapZaakToDTO(zaak);
+            var gelukt = _zaakRepository.MaakZaakAan(dto);
+            if (gelukt)
             {
-                _zaakRepository.MaakZaakAan(MapZaakToDTO(zaak));
-                return true;
+                zaak.Id = dto.Id;
+                zaak.Nummer = dto.Nummer;
             }
-            catch (Exception)
+            return gelukt;
+        }
+
+        public ZaakModel BekijkZaak(int zaakId)
+        {
+            var zaak = _zaakRepository.BekijkZaak(zaakId);
+            if (zaak == null)
             {
-                return false;
+                throw new ArgumentException("Zaak niet gevonden.");
             }
+            return MapZaakToModel(zaak);
         }
 
-        public void WijzigZaak(ZaakModel zaak)
+        public bool VerwijderZaak(int zaakId)
         {
-            if (string.IsNullOrEmpty(zaak.Titel))
+            if (zaakId <= 0) throw new ArgumentOutOfRangeException(nameof(zaakId));
+            return _zaakRepository.VerwijderZaak(zaakId);
+        }
+
+        public bool WijzigZaak(ZaakModel zaak)
+        {
+            if (zaak == null) throw new ArgumentNullException(nameof(zaak));
+            if (string.IsNullOrWhiteSpace(zaak.Titel))
             {
-                throw new ArgumentException("Titel mag niet leeg zijn.");
+                throw new ArgumentException("Titel mag niet leeg zijn.", nameof(zaak.Titel));
             }
-            _zaakRepository.WijzigZaak(MapZaakToDTO(zaak));
+            return _zaakRepository.WijzigZaak(MapZaakToDTO(zaak));
         }
 
-        public int BekijkZaak(int zaakId)
+        public bool VerwijderBewijsstukVanZaak(int zaakId, int bewijsstukId)
         {
-            _zaakRepository.BekijkZaak(zaakId);
-            return 0;
+            if (zaakId <= 0) throw new ArgumentOutOfRangeException(nameof(zaakId));
+            if (bewijsstukId <= 0) throw new ArgumentOutOfRangeException(nameof(bewijsstukId));
+            return _zaakRepository.VerwijderBewijsstukUitZaak(zaakId, bewijsstukId);
         }
+        
 
-        public int VerwijderZaak(int zaakId)
+        public bool WijzigBewijsstukInZaak(int zaakId, BewijsstukDTO bewijsstuk)
         {
-            _zaakRepository.VerwijderZaak(zaakId);
-            return 0;
-        }
-
-        public void VoegBewijsstukToeAanZaak(int zaakId, BewijsstukModel bewijsstuk)
-        {
-            if (string.IsNullOrEmpty(bewijsstuk.Titel))
+            ArgumentNullException.ThrowIfNull(bewijsstuk);
+            if (string.IsNullOrWhiteSpace(bewijsstuk.Titel))
             {
                 throw new ArgumentException("Titel van bewijsstuk mag niet leeg zijn.");
             }
-            _zaakRepository.VoegBewijsstukToeAanZaak(zaakId, MapBewijsstukToDTO(bewijsstuk));
-        }
-
-        public void VerwijderBewijsstukVanZaak(int zaakId, int bewijsstukId)
-        {
-            _zaakRepository.VerwijderBewijsstukUitZaak(zaakId, bewijsstukId);
-        }
-
-        public void WijzigBewijsstukInZaak(int zaakId, BewijsstukDTO bewijsstuk)
-        {
-            if (string.IsNullOrEmpty(bewijsstuk.Titel))
-            {
-                throw new ArgumentException("Titel van bewijsstuk mag niet leeg zijn.");
-            }
-            if (string.IsNullOrEmpty(bewijsstuk.Soort))
+            if (string.IsNullOrWhiteSpace(bewijsstuk.Soort))
             {
                 throw new ArgumentException("Soort van bewijsstuk mag niet leeg zijn.");
             }
-            _zaakRepository.WijzigBewijsstukInZaak(zaakId, bewijsstuk);
+            if (zaakId <= 0) throw new ArgumentOutOfRangeException(nameof(zaakId));
+            return _zaakRepository.WijzigBewijsstukInZaak(zaakId, bewijsstuk);
         }
-        public void WijzigNotitieVanZaak(int zaakId, string notitie)
+        public bool WijzigNotitieVanZaak(int zaakId, string notitie)
         {
-            _zaakRepository.WijzigNotitieInZaak(zaakId, notitie);
+            if (zaakId <= 0) throw new ArgumentOutOfRangeException(nameof(zaakId));
+            return _zaakRepository.WijzigNotitieInZaak(zaakId, notitie);
         }
 
-        // helper mapper
         private static ZaakDTO MapZaakToDTO(ZaakModel zaak) =>
             new ZaakDTO
             {
                 Id = zaak.Id,
+                Nummer = zaak.Nummer,
                 Titel = zaak.Titel,
                 Notitie = zaak.Notitie
             };
 
-        private static BewijsstukDTO MapBewijsstukToDTO(BewijsstukModel bewijsstuk) =>
-            new BewijsstukDTO
-            {
-                Id = bewijsstuk.Id,
-                Titel = bewijsstuk.Titel,
-                Soort = bewijsstuk.Soort
-            };
+        private ZaakModel MapZaakToModel(ZaakDTO zaak)
+        {
+            return new ZaakModel(zaak.Id, zaak.Titel, zaak.Notitie ?? string.Empty) { Nummer = zaak.Nummer };
+      
+        }
     }
 }

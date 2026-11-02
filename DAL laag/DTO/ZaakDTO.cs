@@ -8,6 +8,7 @@ namespace DAL_laag.DTO
     public class ZaakDTO
     {
         public int Id { get; set; }
+        public int Nummer { get; set; }
 
         
         public required string Titel { get; set; }

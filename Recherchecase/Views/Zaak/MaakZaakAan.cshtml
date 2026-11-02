@@ -1,0 +1,46 @@
+﻿@model Recherchecase.ViewModels.ZaakViewModel
+
+@{
+    ViewData["Title"] = "Nieuwe zaak";
+}
+
+<div class="page-heading"><div><div class="eyebrow"><span class="status-dot"></span> Zaakbeheer</div><h1>Nieuwe zaak</h1><p>Registreer de basisgegevens van een recherchezaak.</p></div><a asp-action="Index" class="btn btn-outline-secondary">Terug naar overzicht</a></div>
+<div class="notice-row create-number-note"><span class="notice-icon">#</span><p>Na het opslaan krijgt de zaak automatisch een uniek zaaknummer. Je ziet dit nummer direct op de dossierpagina.</p></div>
+
+<div class="card border-0 shadow-sm">
+    <div class="card-body p-4 p-lg-5">
+        <form asp-action="MaakZaakAan" method="post">
+            @Html.AntiForgeryToken()
+
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger mb-3" role="alert"></div>
+
+            <div class="mb-4">
+                <label asp-for="Titel" class="form-label">Zaaktitel</label>
+                <input asp-for="Titel"
+                       class="form-control"
+                       placeholder="Bijvoorbeeld: Diefstal bij winkel" />
+                <span asp-validation-for="Titel"
+                      class="text-danger"></span>
+            </div>
+
+            <div class="mb-4">
+                <label asp-for="Notitie" class="form-label">Notities</label>
+                <textarea asp-for="Notitie"
+                          class="form-control"
+                          rows="8"
+                          placeholder="Beschrijf de eerste informatie over de zaak..."></textarea>
+                <span asp-validation-for="Notitie"
+                      class="text-danger"></span>
+            </div>
+
+            <div class="form-actions">
+                <a asp-action="Index" class="btn btn-outline-secondary">Annuleren</a>
+                <button type="submit" class="btn btn-primary">Zaak opslaan <span aria-hidden="true">→</span></button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

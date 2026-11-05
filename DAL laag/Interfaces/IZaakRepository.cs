@@ -10,6 +10,7 @@ namespace DAL_laag.Interface;
         bool MaakZaakAan(ZaakDTO zaak);
         bool WijzigZaak(ZaakDTO zaak);
         ZaakDTO? BekijkZaak(int zaakId);
+        List<ZaakDTO> BekijkAlleZaken();
         bool VerwijderZaak(int zaakId);
         bool VoegBewijsstukToeAanZaak(int zaakId, BewijsstukDTO bewijsstuk);
         bool WijzigNotitieInZaak(int zaakId, string notitie);

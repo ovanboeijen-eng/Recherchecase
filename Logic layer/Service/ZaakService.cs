@@ -22,7 +22,6 @@ namespace Logic_layer.Service
             {
                 throw new ArgumentException("Titel mag niet leeg zijn.", nameof(zaak.Titel));
             }
-            zaak.AangemaaktOp = DateTime.Now; // Set the creation date to the current date and time
             var dto = MapZaakToDTO(zaak);
             var gelukt = _zaakRepository.MaakZaakAan(dto);
             if (gelukt)
@@ -41,6 +40,19 @@ namespace Logic_layer.Service
                 throw new ArgumentException("Zaak niet gevonden.");
             }
             return MapZaakToModel(zaak);
+        }
+
+        public List<ZaakModel> BekijkAlleZaken()
+        {
+            var zaakDtos = _zaakRepository.BekijkAlleZaken();
+            var zaken = new List<ZaakModel>(zaakDtos.Count);
+
+            foreach (var zaakDto in zaakDtos)
+            {
+                zaken.Add(MapZaakToModel(zaakDto));
+            }
+
+            return zaken;
         }
 
         public bool VerwijderZaak(int zaakId)

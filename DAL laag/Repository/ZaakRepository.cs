@@ -43,6 +43,35 @@ namespace DAL_laag.Repository
             };
         }
 
+        public List<ZaakDTO> BekijkAlleZaken()
+        {
+            var zaken = new List<ZaakDTO>();
+
+            using var connection = _database.GetConnection();
+            connection.Open();
+            using var command = connection.CreateCommand();
+            command.CommandText = @"
+                SELECT Id, Titel, Notities, Nummer, Beschrijving, AangemaaktOp
+                FROM dbo.Zaak
+                ORDER BY AangemaaktOp DESC, Nummer DESC";
+
+            using var reader = command.ExecuteReader();
+            while (reader.Read())
+            {
+                zaken.Add(new ZaakDTO
+                {
+                    Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                    Titel = reader.IsDBNull(reader.GetOrdinal("Titel")) ? string.Empty : reader.GetString(reader.GetOrdinal("Titel")),
+                    Notitie = reader.IsDBNull(reader.GetOrdinal("Notities")) ? null : reader.GetString(reader.GetOrdinal("Notities")),
+                    Nummer = reader.IsDBNull(reader.GetOrdinal("Nummer")) ? reader.GetInt32(reader.GetOrdinal("Id")) : reader.GetInt32(reader.GetOrdinal("Nummer")),
+                    Beschrijving = reader.IsDBNull(reader.GetOrdinal("Beschrijving")) ? null : reader.GetString(reader.GetOrdinal("Beschrijving")),
+                    AangemaaktOp = reader.GetDateTime(reader.GetOrdinal("AangemaaktOp"))
+                });
+            }
+
+            return zaken;
+        }
+
         public bool MaakZaakAan(ZaakDTO zaak)
         {
             ArgumentNullException.ThrowIfNull(zaak);
@@ -71,14 +100,13 @@ namespace DAL_laag.Repository
             {
                 insertCommand.Transaction = transaction;
                 insertCommand.CommandText = @"
-                    INSERT INTO dbo.Zaak (Id, Titel, Notities, Nummer, Beschrijving, AangemaaktOp)
-                    VALUES (@Id, @Titel, @Notities, @Nummer, @Beschrijving, @AangemaaktOp)";
+                    INSERT INTO dbo.Zaak (Id, Titel, Notities, Nummer, Beschrijving)
+                    VALUES (@Id, @Titel, @Notities, @Nummer, @Beschrijving)";
                 insertCommand.Parameters.Add("@Id", SqlDbType.Int).Value = nextId;
                 insertCommand.Parameters.Add("@Titel", SqlDbType.NVarChar, 50).Value = zaak.Titel.Trim();
                 insertCommand.Parameters.Add("@Notities", SqlDbType.NVarChar, -1).Value = (object?)zaak.Notitie ?? DBNull.Value;
                 insertCommand.Parameters.Add("@Nummer", SqlDbType.Int).Value = nextNummer;
                 insertCommand.Parameters.Add("@Beschrijving", SqlDbType.NVarChar, -1).Value = (object?)zaak.Beschrijving ?? DBNull.Value;
-                insertCommand.Parameters.Add("@AangemaaktOp", SqlDbType.DateTime2).Value = zaak.AangemaaktOp;
                 insertCommand.ExecuteNonQuery();
             }
 

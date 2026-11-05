@@ -22,10 +22,37 @@ namespace Recherchecase.Controllers
         {
             if (zaakId.HasValue)
             {
-                if (zaakId.Value <= 0) { ViewBag.SearchError = "Vul een geldig zaaknummer in."; return View(); }
-                return RedirectToAction(nameof(BekijkZaak), new { zaakId = zaakId.Value });
+                if (zaakId.Value <= 0)
+                {
+                    ViewBag.SearchError = "Vul een geldig zaaknummer in.";
+                }
+                else
+                {
+                    return RedirectToAction(nameof(BekijkZaak), new { zaakId = zaakId.Value });
+                }
             }
-            return View();
+
+            try
+            {
+                var zaken = _zaakService.BekijkAlleZaken()
+                    .Select(zaak => new ZaakViewModel
+                    {
+                        Id = zaak.Id,
+                        Nummer = zaak.Nummer,
+                        Titel = zaak.Titel,
+                        Notitie = zaak.Notitie,
+                        AangemaaktOp = zaak.AangemaaktOp
+                    })
+                    .ToList();
+
+                return View(zaken);
+            }
+            catch (Exception exception)
+            {
+                _logger.LogError(exception, "Ophalen van het zakenoverzicht is mislukt.");
+                ViewBag.ListError = "Het zakenoverzicht kon niet worden geladen. Probeer het later opnieuw.";
+                return View(new List<ZaakViewModel>());
+            }
         }
 
         [HttpGet]

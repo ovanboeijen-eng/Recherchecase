@@ -40,3 +40,24 @@ h1,h2,h3{font-family:var(--serif);letter-spacing:-.045em}h1{font-size:clamp(30px
 .form-label{color:#493d47}.form-control{border-color:#e6dce2}.form-control::placeholder{color:#ad9da6}.form-control:focus{border-color:#b88da2;box-shadow:0 0 0 .2rem rgba(148,100,119,.14)}
 .form-actions{border-color:#f1e9ed}
 .create-number-note{max-width:800px;margin:-12px 0 20px}.case-number{display:inline-block;margin-left:10px;color:#f5e6ed;font-family:var(--serif);font-size:17px;font-weight:700;letter-spacing:.02em}
+.overview-search{margin-bottom:28px}
+.overview-list{overflow:hidden;background:#fff;border:1px solid var(--line);border-radius:13px;box-shadow:0 8px 24px rgba(67,45,59,.035)}
+.overview-list-heading{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:22px 25px;border-bottom:1px solid var(--line)}
+.overview-list-heading h2{margin:0 0 4px;font-size:19px;font-weight:700}
+.overview-list-heading p{margin:0;font-size:12px}
+.overview-count{flex:none;padding:6px 10px;border-radius:999px;background:#f7f0f3;color:var(--teal-dark);font-size:11px;font-weight:700}
+.overview-table thead th{padding:12px 20px;background:#fbf8f9;color:#8a7a84;border-bottom:1px solid var(--line);font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap}
+.overview-table tbody td{padding:16px 20px;border-color:#f2ebee;font-size:13px}
+.overview-table tbody tr:last-child td{border-bottom:0}
+.overview-case-number{display:inline-block;padding:6px 9px;border-radius:7px;background:#f7f0f3;color:var(--teal-dark);font-size:12px;font-weight:700;white-space:nowrap}
+.overview-case-title,.overview-case-note{display:block}
+.overview-case-title{color:var(--ink);font-weight:700}
+.overview-case-note{max-width:350px;margin-top:3px;overflow:hidden;color:var(--muted);font-size:11px;text-overflow:ellipsis;white-space:nowrap}
+.overview-date{color:var(--muted);white-space:nowrap}
+.overview-open-link{color:var(--teal-dark);font-size:12px;font-weight:700;text-decoration:none;white-space:nowrap}
+.overview-open-link:hover{text-decoration:underline}
+.overview-empty{padding:42px 20px;text-align:center}
+.overview-empty-icon{display:grid;place-items:center;width:46px;height:46px;margin:0 auto 15px;border-radius:13px;background:#f7f0f3;color:var(--teal);font-size:22px}
+.overview-empty h3{margin:0 0 6px;font-size:17px;font-weight:700}
+.overview-empty p{margin:0 auto 17px;font-size:12px}
+@media(max-width:767px){.overview-list-heading{padding:18px}.overview-table thead th,.overview-table tbody td{padding:13px 14px}.overview-table tbody td:nth-child(3){font-size:11px}}

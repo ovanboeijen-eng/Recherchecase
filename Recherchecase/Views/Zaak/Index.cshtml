@@ -83,7 +83,7 @@ else
                                         <span class="overview-case-note">@zaak.Notitie</span>
                                     }
                                 </td>
-                                <td class="overview-date">@DateTime.SpecifyKind(zaak.AangemaaktOp, DateTimeKind.Utc).ToLocalTime().ToString("dd-MM-yyyy HH:mm")</td>
+                                <td class="overview-date">@(zaak.AangemaaktOp?.ToString("dd-MM-yyyy HH:mm") ?? "Onbekend")</td>
                                 <td class="text-end">
                                     <a asp-action="BekijkZaak" asp-route-zaakId="@zaak.Nummer" class="overview-open-link">Open zaak <span aria-hidden="true">→</span></a>
                                 </td>

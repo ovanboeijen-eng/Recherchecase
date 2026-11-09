@@ -1,4 +1,4 @@
-﻿@model Recherchecase.ViewModels.ZaakViewModel
+@model Recherchecase.ViewModels.ZaakDetailsViewModel
 
 @{
     ViewData["Title"] = "Zaak bekijken";
@@ -30,8 +30,7 @@
 
     <div class="card-body p-4">
         <h2 class="h4 fw-bold">@Model.Titel</h2>
-        <p class="text-secondary">Aangemaakt op: @DateTime.SpecifyKind(Model.AangemaaktOp, DateTimeKind.Utc).ToLocalTime().ToString("dd-MM-yyyy HH:mm")</p>
-
+        <p class="text-secondary">Aangemaakt op: @(Model.AangemaaktOp?.ToString("dd-MM-yyyy HH:mm") ?? "Onbekend")</p>
         <hr />
 
         <h3 class="detail-section-title">Notitie</h3>
@@ -39,6 +38,78 @@
     </div>
 </div>
 
+<section class="evidence-section" aria-labelledby="bewijsstukken-titel">
+    <div class="evidence-section-heading">
+        <div>
+            <p class="text-uppercase text-secondary small mb-1">Dossierbijlagen</p>
+            <h2 id="bewijsstukken-titel">Bewijsstukken</h2>
+        </div>
+        <span class="overview-count">@Model.Bewijsstukken.Count @(Model.Bewijsstukken.Count == 1 ? "bewijsstuk" : "bewijsstukken")</span>
+    </div>
+
+    @if (Model.Bewijsstukken.Count == 0)
+    {
+        <p class="evidence-empty">Er zijn nog geen bewijsstukken aan deze zaak gekoppeld.</p>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table evidence-table align-middle mb-0">
+                <thead>
+                    <tr>
+                        <th scope="col">Titel</th>
+                        <th scope="col">Soort</th>
+                        <th scope="col">Datum</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var bewijsstuk in Model.Bewijsstukken)
+                    {
+                        <tr>
+                            <td class="fw-semibold">@bewijsstuk.Titel</td>
+                            <td>@bewijsstuk.Soort</td>
+                            <td>@(bewijsstuk.Datum?.ToString("dd-MM-yyyy") ?? "Onbekend")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+
+    <div class="evidence-form-wrap">
+        <h3>Bewijsstuk toevoegen</h3>
+        <p>Vul de gegevens in om het bewijsstuk aan zaak #@Model.Nummer te koppelen.</p>
+        <form asp-action="VoegBewijsstukToe" asp-route-zaakId="@Model.Id" method="post" class="evidence-form">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+            <div class="row g-3">
+                <div class="col-md-5">
+                    <label asp-for="NieuwBewijsstuk.Titel" class="form-label">Titel</label>
+                    <input asp-for="NieuwBewijsstuk.Titel" class="form-control" placeholder="Bijvoorbeeld camerabeeld winkel" />
+                    <span asp-validation-for="NieuwBewijsstuk.Titel" class="text-danger"></span>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="NieuwBewijsstuk.Soort" class="form-label">Soort bewijsstuk</label>
+                    <input asp-for="NieuwBewijsstuk.Soort" class="form-control" placeholder="Bijvoorbeeld video, foto of document" />
+                    <span asp-validation-for="NieuwBewijsstuk.Soort" class="text-danger"></span>
+                </div>
+                <div class="col-md-3">
+                    <label asp-for="NieuwBewijsstuk.Datum" class="form-label">Datum</label>
+                    <input asp-for="NieuwBewijsstuk.Datum" type="date" class="form-control" />
+                    <span asp-validation-for="NieuwBewijsstuk.Datum" class="text-danger"></span>
+                </div>
+                <div class="col-12 d-flex justify-content-end">
+                    <button type="submit" class="btn btn-primary">Bewijsstuk toevoegen</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
+
 <a asp-action="Index" class="btn btn-outline-secondary mt-4">
     Terug naar zaken
 </a>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+

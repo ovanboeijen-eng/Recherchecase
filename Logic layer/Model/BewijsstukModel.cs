@@ -6,9 +6,10 @@ namespace Logic_layer.Models
 {
     public class BewijsstukModel
     {
-       required public int Id { get; set; }
-       required  public string Titel { get; set; }
-       required public string Soort { get; set; }
+       public int Id { get; set; }
+       public string Titel { get; set; }
+       public string Soort { get; set; }
+       public DateTime? Datum { get; set; }
 
         public BewijsstukModel(int id, string titel, string soort)
         {

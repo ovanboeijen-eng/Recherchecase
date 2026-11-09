@@ -6,8 +6,7 @@ namespace Recherchecase.ViewModels
     {
         public  int Id { get; set; }
         public int Nummer { get; set; }
-        public DateTime AangemaaktOp { get; set; }
-
+        public DateTime? AangemaaktOp { get; set; }
         [Required(ErrorMessage = "Vul een titel in.")]
         [StringLength(50, ErrorMessage = "De zaaktitel mag maximaal 50 tekens bevatten.")]
         public string Titel { get; set; } = string.Empty;

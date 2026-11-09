@@ -15,9 +15,9 @@ namespace DAL_laag.DTO
 
         public string? Beschrijving { get; set; }
 
-        
-        public DateTime AangemaaktOp { get; set; }
+        public DateTime? AangemaaktOp { get; set; }
 
+        
         public string? Notitie { get; set; }
     }
 }

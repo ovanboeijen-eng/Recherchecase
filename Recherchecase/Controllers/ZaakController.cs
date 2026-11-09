@@ -73,14 +73,7 @@ namespace Recherchecase.Controllers
                     if (zaak != null)
                     {
 
-                        ZaakViewModel viewModel = new ZaakViewModel
-                        {
-                            Id = zaakId,
-                            Nummer = zaak.Nummer,
-                            Titel = zaak.Titel,
-                            Notitie = zaak.Notitie,
-                            AangemaaktOp = zaak.AangemaaktOp
-                        };
+                        ZaakDetailsViewModel viewModel = MaakZaakDetailsViewModel(zaak);
                         return View(viewModel);
                     }
                 }
@@ -93,6 +86,49 @@ namespace Recherchecase.Controllers
             return NotFound();
 
 
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult VoegBewijsstukToe(int zaakId, ZaakDetailsViewModel viewModel)
+        {
+            ZaakModel zaak;
+            try
+            {
+                zaak = _zaakService.BekijkZaak(zaakId);
+            }
+            catch (ArgumentException)
+            {
+                return NotFound();
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View("Bekijkzaak", MaakZaakDetailsViewModel(zaak, viewModel.NieuwBewijsstuk));
+            }
+
+            try
+            {
+                var bewijsstuk = new BewijsstukModel(0, viewModel.NieuwBewijsstuk.Titel, viewModel.NieuwBewijsstuk.Soort)
+                {
+                    Datum = viewModel.NieuwBewijsstuk.Datum
+                };
+
+                if (!_zaakService.VoegBewijsstukToeAanZaak(zaakId, bewijsstuk))
+                {
+                    ModelState.AddModelError(string.Empty, "Het bewijsstuk kon niet worden opgeslagen.");
+                    return View("Bekijkzaak", MaakZaakDetailsViewModel(zaak, viewModel.NieuwBewijsstuk));
+                }
+
+                TempData["Success"] = "Het bewijsstuk is aan de zaak toegevoegd.";
+                return RedirectToAction(nameof(BekijkZaak), new { zaakId });
+            }
+            catch (Exception exception)
+            {
+                _logger.LogError(exception, "Toevoegen van een bewijsstuk aan zaak {ZaakId} is mislukt.", zaakId);
+                ModelState.AddModelError(string.Empty, "Opslaan is mislukt. Controleer of de databasekolommen voor bewijsstukken zijn toegevoegd.");
+                return View("Bekijkzaak", MaakZaakDetailsViewModel(zaak, viewModel.NieuwBewijsstuk));
+            }
         }
 
         [HttpPost]
@@ -158,13 +194,41 @@ namespace Recherchecase.Controllers
             {
                 return View(viewModel);
             }
-            bool gelukt = _zaakService.WijzigZaak(new ZaakModel(viewModel.Id, viewModel.Titel, viewModel.Notitie) { Nummer = viewModel.Nummer });
+            bool gelukt = _zaakService.WijzigZaak(new ZaakModel(viewModel.Id, viewModel.Titel, viewModel.Notitie)
+            {
+                Nummer = viewModel.Nummer,
+                AangemaaktOp = viewModel.AangemaaktOp
+            });
             if (!gelukt)
             {
                 ModelState.AddModelError("", "De zaak kon niet worden gewijzigd.");
                 return View(viewModel);
             }
             return RedirectToAction(nameof(BekijkZaak), new { zaakId = viewModel.Id });
+        }
+
+        private ZaakDetailsViewModel MaakZaakDetailsViewModel(
+            ZaakModel zaak,
+            VoegBewijsstukToeViewModel? nieuwBewijsstuk = null)
+        {
+            return new ZaakDetailsViewModel
+            {
+                Id = zaak.Id,
+                Nummer = zaak.Nummer,
+                Titel = zaak.Titel,
+                Notitie = zaak.Notitie,
+                AangemaaktOp = zaak.AangemaaktOp,
+                Bewijsstukken = _zaakService.BekijkBewijsstukkenBijZaak(zaak.Id)
+                    .Select(bewijsstuk => new BewijsstukViewModel
+                    {
+                        Id = bewijsstuk.Id,
+                        Titel = bewijsstuk.Titel,
+                        Soort = bewijsstuk.Soort,
+                        Datum = bewijsstuk.Datum
+                    })
+                    .ToList(),
+                NieuwBewijsstuk = nieuwBewijsstuk ?? new VoegBewijsstukToeViewModel()
+            };
         }
 
     }

@@ -11,8 +11,7 @@ namespace Logic_layer.Models
         public int Nummer { get; set; }
         public string Titel { get; set; }
         public string Notitie { get; set; }
-        public DateTime AangemaaktOp { get; set; }
-
+        public DateTime? AangemaaktOp { get; set; }
         public ZaakModel(int id, string titel, string notitie)
         {
             Id = id;

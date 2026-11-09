@@ -10,6 +10,6 @@ namespace DAL_laag.DTO
         public required string Titel { get; set; }
         public required string Soort { get; set; }
 
-        public DateTime Datum { get; set; }
+        public DateTime? Datum { get; set; }
     }
 }

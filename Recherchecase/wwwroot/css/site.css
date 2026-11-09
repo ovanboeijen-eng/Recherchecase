@@ -60,4 +60,15 @@ h1,h2,h3{font-family:var(--serif);letter-spacing:-.045em}h1{font-size:clamp(30px
 .overview-empty-icon{display:grid;place-items:center;width:46px;height:46px;margin:0 auto 15px;border-radius:13px;background:#f7f0f3;color:var(--teal);font-size:22px}
 .overview-empty h3{margin:0 0 6px;font-size:17px;font-weight:700}
 .overview-empty p{margin:0 auto 17px;font-size:12px}
+.evidence-section{overflow:hidden;margin-top:28px;background:#fff;border:1px solid var(--line);border-radius:13px;box-shadow:0 8px 24px rgba(67,45,59,.035)}
+.evidence-section-heading{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:22px 25px;border-bottom:1px solid var(--line)}
+.evidence-section-heading h2{margin:0;font-size:20px;font-weight:700}
+.evidence-table thead th{padding:12px 20px;background:#fbf8f9;color:#8a7a84;border-bottom:1px solid var(--line);font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+.evidence-table tbody td{padding:14px 20px;border-color:#f2ebee;font-size:13px}
+.evidence-empty{margin:0;padding:22px 25px;font-size:13px}
+.evidence-form-wrap{padding:24px 25px;border-top:1px solid var(--line);background:#fdfbfc}
+.evidence-form-wrap h3{margin:0 0 5px;font-size:17px;font-weight:700}
+.evidence-form-wrap>p{margin:0 0 18px;font-size:12px}
+.evidence-form{max-width:100%}
+@media(max-width:767px){.evidence-section-heading,.evidence-form-wrap{padding:18px}.evidence-table thead th,.evidence-table tbody td{padding:12px 14px}}
 @media(max-width:767px){.overview-list-heading{padding:18px}.overview-table thead th,.overview-table tbody td{padding:13px 14px}.overview-table tbody td:nth-child(3){font-size:11px}}

@@ -20,6 +20,7 @@ namespace Logic_layer.Service
 
         public bool MaakBewijsstukAan(BewijsstukModel bewijsstuk)
         {
+    
             if (bewijsstuk == null) throw new ArgumentNullException(nameof(bewijsstuk));
             if (string.IsNullOrEmpty(bewijsstuk.Titel))
             {
@@ -33,7 +34,6 @@ namespace Logic_layer.Service
             }
             catch (Exception ex)
             {
-                // Log de foutmelding of voer andere foutafhandelingslogica uit
                 throw new Exception("Er is een fout opgetreden bij het aanmaken van het bewijsstuk.", ex);
             }
 
@@ -67,7 +67,7 @@ namespace Logic_layer.Service
                 Id = bewijsstuk.Id,
                 Titel = bewijsstuk.Titel,
                 Soort = bewijsstuk.Soort,
-              
+                Datum = bewijsstuk.Datum
             };
     }
 }

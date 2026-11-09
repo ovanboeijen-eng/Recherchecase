@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using Recherchecase.Models;
+using Recherchecase.ViewModels;
 using System.Diagnostics;
 
 namespace Recherchecase.Controllers

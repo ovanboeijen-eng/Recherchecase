@@ -1,0 +1,15 @@
+@model Recherchecase.ViewModels.ZaakViewModel
+@{ ViewData["Title"] = "Zaak wijzigen"; }
+<div class="page-heading"><div><div class="eyebrow"><span class="status-dot"></span> Zaakbeheer · #@Model.Nummer</div><h1>Dossier wijzigen</h1><p>Werk de gegevens van deze zaak bij.</p></div><a asp-action="BekijkZaak" asp-route-zaakId="@Model.Id" class="btn btn-outline-secondary">Terug naar dossier</a></div>
+<div class="form-panel">
+    <form asp-action="WijzigZaak" method="post">
+        @Html.AntiForgeryToken()
+        <input asp-for="Id" type="hidden" />
+        <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+        <div class="mb-4"><label asp-for="Titel" class="form-label">Zaaktitel</label><input asp-for="Titel" class="form-control" placeholder="Geef de zaak een herkenbare titel" /><span asp-validation-for="Titel" class="text-danger"></span></div>
+        <div class="mb-4"><label asp-for="AangemaaktOp" class="form-label">Aanmaakdatum</label><input asp-for="AangemaaktOp" asp-format="{0:yyyy-MM-ddTHH:mm}" type="datetime-local" class="form-control" /><span asp-validation-for="AangemaaktOp" class="text-danger"></span></div>
+        <div class="mb-4"><label asp-for="Notitie" class="form-label">Notities</label><textarea asp-for="Notitie" class="form-control" rows="8" placeholder="Leg relevante informatie vast"></textarea><span asp-validation-for="Notitie" class="text-danger"></span></div>
+        <div class="form-actions"><a asp-action="BekijkZaak" asp-route-zaakId="@Model.Id" class="btn btn-outline-secondary">Annuleren</a><button type="submit" class="btn btn-primary">Wijzigingen opslaan <span aria-hidden="true">→</span></button></div>
+    </form>
+</div>
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }
